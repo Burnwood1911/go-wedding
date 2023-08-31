@@ -13,6 +13,8 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 
 	api.Post("/scan", handlers.NewHandler(db).ScanInvite)
 
+	api.Get("/:secret", handlers.NewHandler(db).GetInvite)
+
 	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusNotFound)
 	})

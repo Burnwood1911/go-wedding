@@ -111,6 +111,32 @@ func (h *Handler) ScanInvite(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(models.GeneralResponse{
 		StatusCode: fiber.StatusOK,
 		Message:    "success",
+		Data:       nil,
+	})
+
+}
+
+func (h *Handler) GetInvite(c *fiber.Ctx) error {
+
+	var err error
+
+	inviteRepo := models.NewInviteRepo(h.DB)
+
+	sc := c.Params("secret")
+
+	i, err := inviteRepo.GetInviteBySecret(sc)
+
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(models.GeneralResponse{
+			StatusCode: fiber.StatusNotFound,
+			Message:    "Invite not found with error " + err.Error(),
+			Data:       nil,
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(models.GeneralResponse{
+		StatusCode: fiber.StatusOK,
+		Message:    "success",
 		Data:       i,
 	})
 
